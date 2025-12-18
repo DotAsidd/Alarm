@@ -1,0 +1,7 @@
+{
+  "name": "PHT 10-Min Reminder Pro",
+  "description": "A productivity dashboard synced to Philippine Time (PHT) that provides smart motivational reminders every 10 minutes using Gemini AI and high-quality TTS.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
