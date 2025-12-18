@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Clock, Bell, History, Settings as SettingsIcon, Zap, CheckCircle2, ChevronRight, Volume2, VolumeX, PlayCircle, Info, RefreshCw } from 'lucide-react';
+import { Clock, Bell, History, Settings as SettingsIcon, Zap, CheckCircle2, Volume2, VolumeX, PlayCircle, Info, RefreshCw } from 'lucide-react';
 import { Reminder, Settings } from './types';
 import { generateReminderMessage, speakMessage } from './services/geminiService';
 import SettingsModal from './components/SettingsModal';
@@ -61,7 +60,6 @@ const App: React.FC = () => {
 
   const triggerReminder = useCallback(async (timeStr: string) => {
     // 1. Play Alarm Sound immediately if unlocked
-    // This will work in background if tab is active/open and interaction happened once
     if (audioUnlocked && alarmAudio.current) {
       alarmAudio.current.currentTime = 0;
       alarmAudio.current.play().catch(e => {
@@ -97,12 +95,11 @@ const App: React.FC = () => {
       setTimeout(() => speakMessage(message), 1200);
     }
 
-    // Browser Notification - shows even when tab is background
+    // Browser Notification
     if (Notification.permission === 'granted') {
-      // Fixed: Removing 'renotify' to avoid TypeScript error as it may not exist in some NotificationOptions type definitions.
       const n = new Notification('PHT Focus Reminder', { 
         body: message, 
-        silent: false, // Let system handle sound if browser allows
+        silent: false,
         tag: 'pht-reminder'
       });
       n.onclick = () => window.focus();
@@ -202,7 +199,6 @@ const App: React.FC = () => {
       </header>
 
       <main className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 flex-grow">
-        {/* Left Column: Clock and Timer */}
         <div className="lg:col-span-7 space-y-8">
           <section className={`glass-panel p-10 rounded-[2.5rem] flex flex-col items-center justify-center text-center relative overflow-hidden transition-all duration-500 ${isAlarmPlaying ? 'ring-4 ring-red-500 shadow-[0_0_80px_rgba(239,68,68,0.5)] bg-red-950/20' : ''}`}>
             {!audioUnlocked && (
@@ -283,7 +279,6 @@ const App: React.FC = () => {
           </section>
         </div>
 
-        {/* Right Column: History */}
         <div className="lg:col-span-5 space-y-8">
           <section className="glass-panel p-8 rounded-[2.5rem] h-full flex flex-col shadow-2xl">
             <div className="flex justify-between items-center mb-8">
